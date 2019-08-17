@@ -1,0 +1,2 @@
+# SpotSQLite
+Simple SQLite wrapper
