@@ -17,7 +17,6 @@
 		9B3D9C552308391E0091BA83 /* SQLiteStatement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B3D9C4D2308391E0091BA83 /* SQLiteStatement.swift */; };
 		9B3D9C562308391E0091BA83 /* SQLParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B3D9C4E2308391E0091BA83 /* SQLParameter.swift */; };
 		9B3D9C572308391E0091BA83 /* SQLiteDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B3D9C4F2308391E0091BA83 /* SQLiteDB.swift */; };
-		9B3D9C582308391E0091BA83 /* SpotSQLite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B3D9C502308391E0091BA83 /* SpotSQLite.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,7 +43,6 @@
 		9B3D9C4D2308391E0091BA83 /* SQLiteStatement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteStatement.swift; sourceTree = "<group>"; };
 		9B3D9C4E2308391E0091BA83 /* SQLParameter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLParameter.swift; sourceTree = "<group>"; };
 		9B3D9C4F2308391E0091BA83 /* SQLiteDB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteDB.swift; sourceTree = "<group>"; };
-		9B3D9C502308391E0091BA83 /* SpotSQLite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotSQLite.swift; sourceTree = "<group>"; };
 		9B3D9C59230839350091BA83 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../Package.swift; sourceTree = "<group>"; };
 		9B3D9C5A230839350091BA83 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -126,7 +124,6 @@
 				9B3D9C4D2308391E0091BA83 /* SQLiteStatement.swift */,
 				9B3D9C4E2308391E0091BA83 /* SQLParameter.swift */,
 				9B3D9C4F2308391E0091BA83 /* SQLiteDB.swift */,
-				9B3D9C502308391E0091BA83 /* SpotSQLite.swift */,
 			);
 			path = SpotSQLite;
 			sourceTree = "<group>";
@@ -243,7 +240,6 @@
 				9B3D9C562308391E0091BA83 /* SQLParameter.swift in Sources */,
 				9B3D9C522308391E0091BA83 /* SQLiteField.swift in Sources */,
 				9B3D9C532308391E0091BA83 /* SQLiteError.swift in Sources */,
-				9B3D9C582308391E0091BA83 /* SpotSQLite.swift in Sources */,
 				9B3D9C552308391E0091BA83 /* SQLiteStatement.swift in Sources */,
 				9B3D9C512308391E0091BA83 /* SQLiteTable.swift in Sources */,
 				9B3D9C542308391E0091BA83 /* SQLiteValue.swift in Sources */,
