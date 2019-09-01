@@ -51,3 +51,7 @@ extension Sequence where Iterator.Element == SQLiteField {
 		map {$0.name}.joined(separator: ",")
 	}
 }
+
+extension SQLiteField: CustomStringConvertible {
+	public var description: String {name}
+}

@@ -9,6 +9,15 @@
 import XCTest
 @testable import SpotSQLite
 
+private let fieldID = SQLiteField("id", .integer)
+private let fieldName = SQLiteField("name", .text)
+private let fieldI64 = SQLiteField("i64", .integer)
+private let fieldR = SQLiteField("r", .real)
+
+private let tableTest = SQLiteTable("test", [
+	fieldID, fieldName, fieldI64, fieldR,
+], primaryKeys: [])
+
 class SpotSQLiteTests: XCTestCase {
 
     override func setUp() {
@@ -28,26 +37,25 @@ class SpotSQLiteTests: XCTestCase {
 			defer {
 				print(db.lastErrorMessage ?? "done")
 			}
-			try db.prepare("DROP TABLE test").execute()
-			try db.prepare("CREATE TABLE IF NOT EXISTS test (id INT NOT NULL,name TEXT NOT NULL,i64 INT NOT NULL,r REAL NOT NULL)")
-				.execute()
-			let stmtInsert = try db.prepare("INSERT INTO test (id,name,i64,r) VALUES(?,?,?,?)")
+			try db.prepare("DROP TABLE IF EXISTS \(tableTest)").execute()
+			try db.prepare(tableTest.createQuery(ifNotExist: true)).execute()
+			let stmtInsert = try db.prepare("INSERT INTO \(tableTest) (id,name,i64,r) VALUES(?,?,?,?)")
 			let base: Int64 = 894879898139627520
 			for i in 0..<10 {
 				try stmtInsert.execute([i, "\(arc4random())", base + Int64(i), Float(i) / 10 + Float(base)])
 			}
 			timeInsert = Date().timeIntervalSince1970 - timeStart
 			
-			let stmt = try db.prepare("SELECT id,name,i64,r FROM test WHERE id>?")
+			let stmt = try db.prepare("SELECT \(fieldID),name,i64,r FROM \(tableTest) WHERE id>?")
 				.query([0])
 			while stmt.next() {
 				print("id=\(stmt.value(of: "id")!), name=\(stmt.value(of: "name")!), i64=\(stmt.value(of: "i64")!), r=\(stmt.value(of: "r")!)")
 			}
-			let id3Name = try db.prepare("SELECT name FROM test WHERE id=?")
+			let id3Name = try db.prepare("SELECT \(fieldName) FROM \(tableTest) WHERE id=?")
 				.queryScalar([3])
 			print("id3Name=", id3Name ?? -1)
 		} catch {
-			print(error, db.lastPreparedSQL)
+			XCTFail("lastSQL=\"\(db.lastPreparedSQL)\"\n\(error)\n\(db.lastErrorMessage as Any)")
 		}
 		print("\ntotal cost(s):", Date().timeIntervalSince1970 - timeStart, "\ninsert cost(s):", timeInsert)
 	}

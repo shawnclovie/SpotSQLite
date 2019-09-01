@@ -83,3 +83,7 @@ public struct SQLiteTable {
 		return (ql, params)
 	}
 }
+
+extension SQLiteTable: CustomStringConvertible {
+	public var description: String {name}
+}
