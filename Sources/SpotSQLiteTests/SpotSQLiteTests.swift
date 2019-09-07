@@ -16,7 +16,7 @@ private let fieldR = SQLiteField("r", .real)
 
 private let tableTest = SQLiteTable("test", [
 	fieldID, fieldName, fieldI64, fieldR,
-], primaryKeys: [])
+], primaryKeys: [], indices: [.init("index_a", fieldR, fieldI64), .init("index_b", unique: true, fieldName)])
 
 class SpotSQLiteTests: XCTestCase {
 

@@ -7,17 +7,29 @@
 //
 
 public struct SQLiteTable {
+	public struct Index {
+		public var name: String
+		public var unique: Bool
+		public var fields: [SQLiteField]
+		
+		public init(_ n: String, unique: Bool = false, _ fields: SQLiteField...) {
+			name = n
+			self.unique = unique
+			self.fields = fields
+		}
+	}
+	
 	public let name: String
 	public let fields: [SQLiteField]
 	public let primaryKeys: [SQLiteField]
 	/// key: index name, value: field names
-	public let indics: [String: [String]]
+	public let indices: [Index]
 	
-	public init(_ name: String, _ fields: [SQLiteField], primaryKeys: [SQLiteField], indics: [String: [String]] = [:]) {
+	public init(_ name: String, _ fields: [SQLiteField], primaryKeys: [SQLiteField], indices: [Index] = []) {
 		self.name = name
 		self.fields = fields
 		self.primaryKeys = primaryKeys
-		self.indics = indics
+		self.indices = indices
 	}
 	
 	public func createQuery(ifNotExist: Bool = false) -> String {
@@ -35,11 +47,15 @@ public struct SQLiteTable {
 			ql += ",PRIMARY KEY (" +
 				primaryKeys.map {"`\($0.name)`"}.joined(separator: ",") + ")"
 		}
-		for it in indics {
-			ql += ",INDEX \(it.key) (`\(it.value.joined(separator: "`,`"))`)"
+		ql += ");"
+		if !indices.isEmpty {
+			ql += indices.map(createIndexQuery).joined()
 		}
-		ql += ")"
 		return ql
+	}
+	
+	public func createIndexQuery(_ i: Index) -> String {
+		"CREATE INDEX\(i.unique ? " UNIQUE" : "") \(i.name) ON `\(name)` (`\(i.fields.map{$0.name}.joined(separator: "`,`"))`);"
 	}
 	
 	public func insertQuery(_ fields: [SQLiteField]) -> String {
