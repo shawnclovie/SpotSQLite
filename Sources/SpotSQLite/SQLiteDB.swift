@@ -18,7 +18,11 @@ public final class SQLiteDB {
 	
 	/// Generate placeholder list for SQL, e.g. ?,?,?
 	public static func sqlPlaceholder(for arguments: [Any]) -> String {
-		Array<String>(repeating: "?", count: arguments.underestimatedCount)
+		sqlPlaceholder(count: arguments.underestimatedCount)
+	}
+	
+	public static func sqlPlaceholder(count: Int) -> String {
+		Array<String>(repeating: "?", count: max(0, count))
 			.joined(separator: ",")
 	}
 	

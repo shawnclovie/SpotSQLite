@@ -42,7 +42,25 @@ public struct SQLiteTable {
 		return ql
 	}
 	
-	public func updateQueryParameters(values: [SQLiteField: SQLParameter], where: [SQLiteField: SQLParameter]) -> (String, [SQLParameter]) {
+	public func insertQuery(_ fields: [SQLiteField]) -> String {
+		"INSERT INTO `\(name)` (\(fields.map{$0.name}.joined(separator: ","))) VALUES (\(SQLiteDB.sqlPlaceholder(count: fields.count)))"
+	}
+	
+	public func updateQueryParameters(values: [SQLiteField: SQLParameter], where map: [SQLiteField: SQLParameter]) -> (String, [SQLParameter]) {
+		var w: (SQLWhere, [SQLParameter])?
+		if !map.isEmpty {
+			var params: [SQLParameter] = []
+			var qlWhere: [String] = []
+			for it in map {
+				params.append(it.value)
+				qlWhere.append("`\(it.key.name)`=?")
+			}
+			w = (.init(qlWhere.joined(separator: " AND ")), params)
+		}
+		return updateQueryParameters(values: values, where: w)
+	}
+	
+	public func updateQueryParameters(values: [SQLiteField: SQLParameter], where: (SQLWhere, [SQLParameter])?) -> (String, [SQLParameter]) {
 		var params: [SQLParameter] = []
 		var qlValues: [String] = []
 		for it in values {
@@ -50,13 +68,9 @@ public struct SQLiteTable {
 			qlValues.append("`\(it.key.name)`=?")
 		}
 		var ql = "UPDATE `\(name)` SET " + qlValues.joined(separator: ",")
-		if !`where`.isEmpty {
-			var qlWhere: [String] = []
-			for it in `where` {
-				params.append(it.value)
-				qlWhere.append("`\(it.key.name)`=?")
-			}
-			ql += " WHERE " + qlWhere.joined(separator: " AND ")
+		if let w = `where` {
+			ql += " WHERE \(w.0)"
+			params.append(contentsOf: w.1)
 		}
 		return (ql, params)
 	}
@@ -70,17 +84,29 @@ public struct SQLiteTable {
 	}
 	
 	public func deleteQueryParameters(where: [SQLiteField: SQLParameter]) -> (String, [SQLParameter]) {
+		var w: SQLWhere?
 		var params: [SQLParameter] = []
-		var ql = "DELETE FROM `\(name)`"
 		if !`where`.isEmpty {
 			var qlWhere: [String] = []
 			for it in `where` {
 				params.append(it.value)
 				qlWhere.append("`\(it.key.name)`=?")
 			}
-			ql += " WHERE " + qlWhere.joined(separator: " AND ")
+			w = .init(qlWhere.joined(separator: " AND "))
 		}
-		return (ql, params)
+		return (deleteQuery(where: w), params)
+	}
+	
+	public func deleteQuery(where: SQLWhere?) -> String {
+		var ql = "DELETE FROM `\(name)`"
+		if let w = `where` {
+			ql += " WHERE " + w.statement
+		}
+		return ql
+	}
+	
+	public func dropQuery(ifExists: Bool) -> String {
+		"DROP TABLE\(ifExists ? " IF EXISTS" : "") `\(name)`"
 	}
 }
 

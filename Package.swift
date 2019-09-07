@@ -12,8 +12,7 @@ let package = Package(
     dependencies: [
     ],
     targets: [
-        .target(
-            name: "SpotSQLite",
-            dependencies: []),
+        .target(name: "SpotSQLite", dependencies: []),
+		.testTarget(name: "SpotSQLiteTests", dependencies: ["SpotSQLite"]),
     ]
 )
