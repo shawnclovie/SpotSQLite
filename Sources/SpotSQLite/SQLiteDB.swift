@@ -57,7 +57,7 @@ public final class SQLiteDB {
 	}
 	
 	/// Access DB version, default by 0
-	public var version: Int {
+	public var version: Int64 {
 		get {
 			try! prepare("PRAGMA user_version").queryScalar() as? Int64 ?? 0
 		}
